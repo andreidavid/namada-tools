@@ -1,0 +1,4 @@
+# Ignore everything in the artifacts folder
+*
+# But keep this .gitignore file
+!.gitignore
