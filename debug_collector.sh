@@ -72,15 +72,30 @@ determine_base_dir() {
     echo "$base_dir"
 }
 
-# Get chain ID from the first non-pre-genesis directory in base_dir
 determine_chain_id() {
     local base_dir="$1"
+    local chain_id=""
+    
+    # First try to find chain.toml in subdirectories
     for dir in "$base_dir"/*; do
-        if [[ -d "$dir" && ! "$dir" =~ pre-genesis$ ]]; then
-            basename "$dir"
-            break
+        if [[ -d "$dir" && ! "$dir" =~ pre-genesis$ && ! "$dir" =~ logs$ ]]; then
+            local chain_toml="$dir/chain.toml"
+            if [[ -f "$chain_toml" ]]; then
+                # Extract chain_id from chain.toml, without any logging
+                chain_id=$(grep '^chain_id = ' "$chain_toml" | cut -d'"' -f2)
+                if [[ -n "$chain_id" ]]; then
+                    break
+                fi
+            fi
         fi
     done
+
+    if [[ -n "$chain_id" ]]; then
+        echo "$chain_id"
+        return 0
+    else
+        return 1
+    fi
 }
 
 check_requirements() {
@@ -303,7 +318,7 @@ main() {
         exit 1
     fi
 
-    # Determine chain ID
+    # Determine chain ID (store in variable first, then log)
     CHAIN_ID=$(determine_chain_id "$NAMADA_BASE_DIR")
     if [[ -z "$CHAIN_ID" ]]; then
         log_error "Could not determine chain ID in $NAMADA_BASE_DIR"
