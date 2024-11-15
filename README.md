@@ -20,6 +20,14 @@ Downloads artifacts from Namada GitHub workflow runs and verifies WASM files by 
 python github_downloader.py --run-id <ID>
 ```
 
+### [Debug Collector](docs/debug-collector.md)
+
+Script for collecting and packaging debug information from a running Namada node. Automatically sanitizes sensitive data, collects configs, logs, and system information into a single debug report archive.
+
+```bash
+./debug_collector.sh [validator-alias]
+```
+
 ## Development
 
 1. Create a virtual environment (recommended):
