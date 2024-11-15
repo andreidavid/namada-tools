@@ -7,7 +7,7 @@ Decodes and displays Namada governance proposals in a human-readable format.
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/namada-tools.git
+    git clone https://github.com/andreidavid/namada-tools.git
     cd namada-tools
     ```
 
